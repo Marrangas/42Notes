@@ -14,25 +14,33 @@ Bonus: Configura una sistema funcional de worpress con las funcionalidades light
 
 ## Parte 0: CREACIÓN DE UNA MAQUINA VIRTUAL
 ```
-0. Crear carpeta en sgoinfree/nuestrousuario
-1. Descargar iso Debian de la página web propia (misma configuración de arquitectura que nuestro ordenador 64 bits en nuestro caso
-2. Virtual Box --> Nueva --> Memoria(Default) --> Disco Duro VDI (30.8Gb) #Guardo en sgoinfree
-3. Configuracion-->Red-->Adaptador puente 					Para conexiones posteriores del bonus
-										(En caso de que no vayasmos a hacer el bonus lo dejaremos tal y como está NAT)
-4. Configuración-->Pantalla-->VBoxVGA #Evita un bug al iniciar la máquina
+0. Crear carpeta en sgoinfree/<usuario>
+1. Descargar iso Debian https://www.debian.org/distrib/netinst 
+   misma arquitectura que nuestro ordenador amd64 en nuestro caso
+2. Virtual Box --> Nueva --> Memoria(Default) --> Disco Duro VDI
+   (12GB para evitar borrado accidental) Guardo en sgoinfree
+3. Configuracion-->Red-->Adaptador puente 
+   Para conexiones posteriores del bonus
+   (En caso de que no vayasmos a hacer el bonus lo dejaremos tal y como está NAT)
+4. Configuración-->Pantalla-->VBoxVGA
+   Evita un bug al iniciar la máquina
 5. Seleccionamos la .iso como disco de arranque
 ```
 
 ## Parte 1 LVM
 ```
-Install
-Idioma, localizacion, y idioma de teclado (locale configuration)
-Hostname: "login42", usuario: "login", y contraseña y contraseña del root
-Zona horaria
-Particiones: Manual		Elegimos el disco duro como lugar donde hacer las particiones, con el tamaño completo
+6. Idioma, localizacion, y idioma de teclado (locale configuration)
+7. Hostname: "login42", usuario: "login", y contraseña y contraseña del root
+8. Zona horaria
+9. Particiones: Manual		Elegimos el disco duro como lugar donde hacer las particiones
+				con el tamaño completo
 Particion primaria (physical):
-Tamaño segun subject, y al principio del espacio disponible montandolo en /boot 
-			#Va a ser el sda1, la particion fisica donde vamos a instalar el arranque del sistema
+Tamaño segun subject, tamaño en potencias de 1024
+al principio del espacio disponible montandolo en /boot
+
+				Va a ser el sda1
+				la particion fisica donde vamos a instalar el arranque del sistema
+				
 Partición lógica (Logical Volume):
 Seleccionamos el resto de la partición y la seleccionamos como volumen físico para encriptacion
 #Nos piden que el volumen logico este encriptado
@@ -62,7 +70,8 @@ Deseleccionamos los paquetes extra ESPECIALMENTE LA INTERFAZ GRAFICA
 8. Usar password de encriptación
 9. Login: Preferible root para el setup
 10. lsblk					<- Comprobamos que las particiones son correctas
-11. aa-status					<- Comprobamos el estado de AppArmor. Deberia estar instalada y funcional por defecto
+11. aa-status					<- Comprobamos el estado de AppArmor. Deberia estar instalada y funcional | Ancho máximo de el readme de github)
+						   por defecto
 ```
 
 ## Parte 3 SUDO
@@ -78,7 +87,7 @@ Deseleccionamos los paquetes extra ESPECIALMENTE LA INTERFAZ GRAFICA
 Configuración sudo: 
   /etc/sudoers					a) archivo de configuración inicial
   /etc/sudoers.d/<otras_config>			b) posibilidad de crear nuevos archivos de configuración de sudo
-						   (El archivo sin ~ ni)
+						   (El archivo sin ~ ni .)
 
 17. sudo vim /etc/sudoers.d/sudo-conf		a) Modo de editar con el programa de la elección específico
 	sudo -e /etc/sudoers.d/sudo-conf	b) Modo de editar (da a alegir entre los programas instalados)
@@ -86,7 +95,7 @@ Configuración sudo:
    Defaults passwd_tries=3			<- Maximo numero de intentos para acceder a sudo
    Defaults badpass_message="error"		<- Mensaje de error personalizado
    Defaults log_input,log_output 		<- Guardado de los imputs y los okutputs
-   Defaults iolog_dir="/var/log/sudo" 		<- Lugar de guardado de los logs (hay que crear el directorio manualmente)
+   Defaults iolog_dir="/var/log/sudo" 		<- Lugar de guardado de los logs (crear directorio manualmente)
    Defaults requiretty 				<- Obligamos a que solo se pueda usar desde terminal.
 						   Ningún proograma podrá usar sudo si no es desdde consola
 						   Ver conceptos [TTY](#tty)
