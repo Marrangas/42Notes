@@ -1,26 +1,26 @@
 # Born2beRoot
 Index
-- (LVM setup)[#LVM setup]
+- [LVM setup](# LVM setup)
 - Instalation
 - Scripting
 - Bonus
 - Concepts
 - List of important comands
 </br>
-#LVM setup
-(Back to index)[#Born2beRoot]</br>
+# LVM setup
+[Back to index](# Born2beRoot)</br>
 </br>
-#Instalation
-(Back to index)[#Born2beRoot]</br>
+# Instalation
+[Back to index](# Born2beRoot)</br>
 </br>
-#Scripting
-(Back to index)[#Born2beRoot]</br>
+# Scripting
+[Back to index](# Born2beRoot)</br>
 </br>
-#Bonus
-(Back to index)[#Born2beRoot]</br>
+# Bonus
+[Back to index](# Born2beRoot)</br>
 </br>
-#Concepts
-(Back to index)[#Born2beRoot]</br>
+# Concepts
+[Back to index](# Born2beRoot)</br>
 #List of important comands
 
 -Qué es el kernell
