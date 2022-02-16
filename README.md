@@ -14,94 +14,97 @@ Bonus: Configura una sistema funcional de worpress con las funcionalidades light
 
 ## Parte 0: CREACIÓN DE UNA MAQUINA VIRTUAL
 ```
-0.	Crear carpeta en sgoinfree/nuestrousuario
-1.	Descargar iso Debian de la página web propia (misma configuración de arquitectura que nuestro ordenador 64 bits en nuestro caso
-2.	Virtual Box --> Nueva --> Memoria(Default) --> Disco Duro VDI (30.8Gb) #Guardo en sgoinfree
+0. Crear carpeta en sgoinfree/nuestrousuario
+1. Descargar iso Debian de la página web propia (misma configuración de arquitectura que nuestro ordenador 64 bits en nuestro caso
+2. Virtual Box --> Nueva --> Memoria(Default) --> Disco Duro VDI (30.8Gb) #Guardo en sgoinfree
 3. Configuracion-->Red-->Adaptador puente 					Para conexiones posteriores del bonus
 										(En caso de que no vayasmos a hacer el bonus lo dejaremos tal y como está NAT)
 4. Configuración-->Pantalla-->VBoxVGA #Evita un bug al iniciar la máquina
 5. Seleccionamos la .iso como disco de arranque
 ```
-PARTE 2: INSTALACION DEBIAN Y PARTICIONES
-```
-	- Install
-	- Idioma, localizacion, y idioma de teclado (locale configuration)
-	- Hostname: "login42", usuario: "login", y contraseña y contraseña del root
-	- Zona horaria
-	- Particiones: Manual		Elegimos el disco duro como lugar donde hacer las particiones, con el tamaño completo
-		Particion primaria (physical):
-			Tamaño segun subject, y al principio del espacio disponible montandolo en /boot 
-				#Va a ser el sda1, la particion fisica donde vamos a instalar el arranque del sistema
-		Partición lógica (Logical Volume):
-			Seleccionamos el resto de la partición y la seleccionamos como volumen físico para encriptacion
-				#Nos piden que el volumen logico este encriptado
-			Configurar volumenes encriptados-->Crear-->Seleccionamos el volumen a encriptar
-			Elegimos contraseña de encriptacion
-			Particiones del LVM:
-				- Creamos Logical Group en la particion logica. Nombre: LVMGroup 
-				- Creamos los Logical Volumes uno a uno, del tamaño correspondiente 
-					#(var-log solo necesita un guion en el nombre)
-				- Montamos los volumenes de acuerdo al subject, con sistema archivos Ext4
-					#Aqui seleccionamos para que va a ser cada uno (/root, /home, etc). El var log
-					#debemos montarlo escribiendolo manualmente (/var/log)
-					#Además, el swap usa tipo de archivos especial, swap area
-	- Seleccionamos el mirror desde donde descargara los paquetes el apt
-	- Deseleccionamos los paquetes extra ESPECIALMENTE LA INTERFAZ GRAFICA
-```
+
 ## Parte 1 LVM
 ```
-1.	Comprobar, el procesador del ordnador, la arquitectura debe ser la misma para poder virtualizar correctamente el sistema que elijamos (Debian 64 en este caso)
-2.	Crear la crear la máquina virtual en Virtual box
-3.	Crear 1 partición para el /boot (arranque del sistema operativo)
-4.	El resto del espacio reservado, ccrearemos una partición selecciónando la opción de do not mount it
-5.	Creamos un grupo volumenes encriptados (LVM)
-6.	Añadimos las particiones, según el tamaño del subject (considerar que virtual box gestióna la reserva de memoria en 1024 Bits)
+Install
+Idioma, localizacion, y idioma de teclado (locale configuration)
+Hostname: "login42", usuario: "login", y contraseña y contraseña del root
+Zona horaria
+Particiones: Manual		Elegimos el disco duro como lugar donde hacer las particiones, con el tamaño completo
+Particion primaria (physical):
+Tamaño segun subject, y al principio del espacio disponible montandolo en /boot 
+			#Va a ser el sda1, la particion fisica donde vamos a instalar el arranque del sistema
+Partición lógica (Logical Volume):
+Seleccionamos el resto de la partición y la seleccionamos como volumen físico para encriptacion
+#Nos piden que el volumen logico este encriptado
+	Configurar volumenes encriptados-->Crear-->Seleccionamos el volumen a encriptar
+	Elegimos contraseña de encriptacion
+	Particiones del LVM:
+		- Creamos Logical Group en la particion logica. Nombre: LVMGroup 
+		- Creamos los Logical Volumes uno a uno, del tamaño correspondiente 
+			#(var-log solo necesita un guion en el nombre)
+		- Montamos los volumenes de acuerdo al subject, con sistema archivos Ext4
+			#Aqui seleccionamos para que va a ser cada uno (/root, /home, etc). El var log
+			#debemos montarlo escribiendolo manualmente (/var/log)
+			#Además, el swap usa tipo de archivos especial, swap area
+Seleccionamos el mirror desde donde descargara los paquetes el apt
+Deseleccionamos los paquetes extra ESPECIALMENTE LA INTERFAZ GRAFICA
+	
+1. Comprobar, el procesador del ordnador, la arquitectura debe ser la misma para poder virtualizar correctamente el sistema que elijamos (Debian 64 en este caso)
+2. Crear la crear la máquina virtual en Virtual box
+3. Crear 1 partición para el /boot (arranque del sistema operativo)
+4. El resto del espacio reservado, ccrearemos una partición selecciónando la opción de do not mount it
+5. Creamos un grupo volumenes encriptados (LVM)
+6. Añadimos las particiones, según el tamaño del subject (considerar que virtual box gestióna la reserva de memoria en 1024 Bits)
 ```
+
 ##  Parte 2 LOGIN
 ```
-8.	Usar password de encriptación
-9.	Login: Preferible root para el setup
-10.	lsblk									<- 	Comprobamos que las particiones son correctas
-11.	aa-status								<- 	Comprobamos el estado de AppArmor. Deberia estar instalada y funcional por defecto
+8. Usar password de encriptación
+9. Login: Preferible root para el setup
+10. lsblk					<- Comprobamos que las particiones son correctas
+11. aa-status					<- Comprobamos el estado de AppArmor. Deberia estar instalada y funcional por defecto
 ```
+
 ## Parte 3 SUDO
 ```
-14.	apt install sudo						<- 	Debemos estar en root. Si no: "su -" --> "root password"
-15.	dpkg -l | grep sudo						<- 	Comprobamos que este instalado correctamente
-	systemctl status sudo
-16. adduser <usuario> sudo					<- 	Añadimos el usuario al grupo sudo
-14. getent group sudo						<- 	Comprobacion usuario
-15.	sudo reboot								<- 	Reiniciar sudo
-16.	sudo -v									<- 	Comprobación sudopowers
+14. apt install sudo				<- Debemos estar en root. Si no: "su -" --> "root password"
+15. dpkg -l | grep sudo				<- Comprobamos que este instalado correctamente
+    systemctl status sudo
+16. adduser <usuario> sudo			<- Añadimos el usuario al grupo sudo
+14. getent group sudo				<- Comprobacion usuario
+15. sudo reboot					<- Reiniciar sudo
+16. sudo -v					<- Comprobación sudopowers
 
 Configuración sudo: 
-	/etc/sudoers							a) 	archivo de configuración inicial
-	/etc/sudoers.d/<otras_config>			b) 	posibilidad de crear nuevos archivos de configuración de sudo
-												(El archivo sin ~ ni)
+  /etc/sudoers					a) archivo de configuración inicial
+  /etc/sudoers.d/<otras_config>			b) posibilidad de crear nuevos archivos de configuración de sudo
+						   (El archivo sin ~ ni)
 
-17. sudo vim /etc/sudoers.d/sudo-conf		a) 	Modo de editar con el programa de la elección específico
-	sudo -e /etc/sudoers.d/sudo-conf		b) 	Modo de editar (da a alegir entre los programas instalados)
+17. sudo vim /etc/sudoers.d/sudo-conf		a) Modo de editar con el programa de la elección específico
+	sudo -e /etc/sudoers.d/sudo-conf	b) Modo de editar (da a alegir entre los programas instalados)
 
-	Defaults passwd_tries=3					<- 	Maximo numero de intentos para acceder a sudo
-	Defaults badpass_message="error"		<- 	Mensaje de error personalizado
-	Defaults log_input,log_output 			<- 	Guardado de los imputs y los okutputs
-	Defaults iolog_dir="/var/log/sudo" 		<- 	Lugar de guardado de los logs (hay que crear el directorio manualmente)
-	Defaults requiretty 					<- 	Obligamos a que solo se pueda usar desde terminal.
-												Ningún proograma podrá usar sudo si no es desdde consola
-												Ver conceptos [TTY](#tty)
-	Defaults secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
+   Defaults passwd_tries=3			<- Maximo numero de intentos para acceder a sudo
+   Defaults badpass_message="error"		<- Mensaje de error personalizado
+   Defaults log_input,log_output 		<- Guardado de los imputs y los okutputs
+   Defaults iolog_dir="/var/log/sudo" 		<- Lugar de guardado de los logs (hay que crear el directorio manualmente)
+   Defaults requiretty 				<- Obligamos a que solo se pueda usar desde terminal.
+						   Ningún proograma podrá usar sudo si no es desdde consola
+						   Ver conceptos [TTY](#tty)
+   Defaults secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
 
-18. sudo mkdir /var/log/sudo				<-	Creamos la carpeta y el archivo donde vamos a guardar los logs
+18. sudo mkdir /var/log/sudo			<- Creamos la carpeta y el archivo donde vamos a guardar los logs
 ```
+
 ## Parte 3: INSTALAR UFW: Uncomplicated Firewall. Es un firewall facil de configurar. Monitoriza los puertos
 ```
-19.	apt install ufw
-20.	ufw enable
-21. systemctl enable ufw					<-	Activamos que se lance el ufw en cada inicio
-22.	ufw status								<-	Muestra los puertos Activamos
-23.	ufw allow 4242 #Permite el puerto 4242, que segun el subject es el unico debido
-24.	ufw delete numeroderegla	#Elimina la regla numerada
+19. apt install ufw
+20. ufw enable
+21. systemctl enable ufw			<- Activamos que se lance el ufw en cada inicio
+22. ufw status					<- Muestra los puertos Activamos
+23. ufw allow 4242 				<- Permite el puerto 4242, que segun el subject es el unico debido
+24. ufw delete numeroderegla			<- Elimina la regla numerada
 ```
+
 ## Parte 4 INSTALAR SSH
 ```
 con autenticación y encriptacion de datos
@@ -116,6 +119,7 @@ Desde consola externa, comprobamos la conexión remota:
 	ssh user@serverIP -p 4242 #Conectamos con el usuario a la direccion ip y en el puerto 4242
 	(ifconfg -a para comprobar la direccion ip)
 ```
+
 ## Parte 5: INSTALAR POLITICA DE CONTRASEÑAS
 ```
 sudo nano /etc/login.defs		#Cambiamos aqui la politica básica de contraseñas.  
@@ -151,6 +155,7 @@ En los usuarios ya creados, estos cambios no son retroactivos:
 		gpasswd -a nombreusuario nombregrupo #Añade el usuario al grupo. -d lo elimina
 		gpasswd -d <username> <groupname> - removes user from group;
 ```
+
 ## Parte 6: CONFIGURAR UNA TAREA CRONOMETRADA
 ```
 Usaremos cron
@@ -165,6 +170,7 @@ Usaremos cron
 
 sleep $(bc <<< $(who -b | cut -d ":" -f 2)%10*60)
 ```
+
 # Script
 [Volver al índice](#born2beroot)
 
@@ -336,15 +342,6 @@ de seguridad que evita que los programas puedan afectar a elementos que previame
 de hacerlo, aislandolas unas de otras. SELinux en cambio es mucho más complejo, pero también permite
 mayor control y opciones de configuración.
 
-CAMBIO DE HOSTNAME
-
-
-COMANDOS ÚTILES
-```
-
-```
-
-
 ## Virtualización
 ## LVM
 Logical Volume Manager is a system of mapping and managing hard disk memory used on Linux-kernel's based systems. Instead of the old method of partitioning disks on a single filesystem, and having it be limited to only 4 partitions, LVM allows you to work with "Logical Volumes", a more dinamically and flexible way to deal with your hardware.
@@ -375,7 +372,7 @@ con autenticación y encriptacion de datos
 
 # Lista de comandos útiles
 [Volver al índice](#born2beroot)
-
+```
 lsblk                                     1 <- Comprobar particines
 sudo aa-status                            2 <- AppArmor estado
 getent group sudo                         3 <- Usuarios en el grupo sudo
@@ -404,21 +401,27 @@ systemctl enable ufw              *   Activar Firewal al arrancar la máquina
 ufw disable                       *   Deshabilitar Firewall
  
  
-	1) lsblk                              #Comprueba particiones
-	2) sudo aa-status                     #AppArmor
-	3) getent group sudo                  #Usuarios del grupo sudo
-	4) getent group user42                #Usuarios del grupo user42
-	5) sudo service ssh status            #SSH
-	6) sudo ufw status                    #UFW
-	7) ssh username@ipadress -p 4242      #Conectar a la VM desde la terminal
-	8) nano /etc/sudoers.d/<filename>     #Configuración del sudo
-	9) nano /etc/login.defs               #Política de expiracion de contraseñas
-	10) nano /etc/pam.d/common-password   #Política de contraseñas
-	11) sudo crontab -l       			  #Tareas programadas con cron
-	12)sudo /var/log/sudo				  #Logs del sudo
-	13)
+1) lsblk                              #Comprueba particiones
+2) sudo aa-status                     #AppArmor
+3) getent group sudo                  #Usuarios del grupo sudo
+4) getent group user42                #Usuarios del grupo user42
+5) sudo service ssh status            #SSH
+6) sudo ufw status                    #UFW
+7) ssh username@ipadress -p 4242      #Conectar a la VM desde la terminal
+8) nano /etc/sudoers.d/<filename>     #Configuración del sudo
+9) nano /etc/login.defs               #Política de expiracion de contraseñas
+10) nano /etc/pam.d/common-password   #Política de contraseñas
+11) sudo crontab -l       			  #Tareas programadas con cron
+12)sudo /var/log/sudo				  #Logs del sudo
+13)
+```
  
- 
+# Otras notas antes de terminar la guía...
+Subirla la web de la corrección de forma que me pueda ser util
+.... Texto sin formato tal que pueda navegar por la página en crudo.
+
+
+
  La misma mierda con el ssh que no me funciona nunca...
  /etc/ssh/sshd_config              *     Ruta Path de la configuraciónd e ssh
  
@@ -450,7 +453,8 @@ To do:
 [ ] Checkear la correción
 [ ] Añadir una funcionalidad extra en el wordpress??
 [ ] Tengo los conceptos terminados???
-
+	
+[ ]Check corrección:
 
 info extra de administración de sistemas
 https://root.cern.ch/root/htmldoc/guides/users-guide/ROOTUsersGuide.html
