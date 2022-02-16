@@ -1,5 +1,8 @@
 # Born2beRoot
-Index
+Virtualiza un sistema operativo sin interfaz gráfica (Debian o CentOS) y realiza auna configuración del mismo inclluyendo una conexión SSH segura.
+Bonus: Configura una sistema funcional de worpress con las funcionalidades lighttpd, MariaDB, PHP y una extra de tu elección que excluyendo Apache 2.
+
+## Indice
 - [Instalación](#instalación)
 - [Script](#scritp)
 - [Bonus](#bonus)
@@ -9,14 +12,14 @@ Index
 # Instalación
 [Volver al índice](#born2beroot)
 
-## Parte 0: CREACIÓN DE MAQUINA VIRTUAL
- Crear carpeta en sgoinfree/nuestrousuario
- Descargar iso Debian de la página web propia
- Virtual Box --> Nueva --> Memoria(Default) --> Disco Duro VDI (30.8Gb) #Guardo en sgoinfree
- Configuracion-->Red-->Adaptador puente #Para conexiones posteriores del bonus
- Configuración-->Pantalla-->VBoxVGA #Evita un bug al iniciar la máquina
- Seleccionamos la .iso como disco de arranque
- Inicializamos
+## Parte 0: CREACIÓN DE UNA MAQUINA VIRTUAL
+0.	Crear carpeta en sgoinfree/nuestrousuario
+1.	Descargar iso Debian de la página web propia (misma configuración de arquitectura que nuestro ordenador 64 bits en nuestro caso
+2.	Virtual Box --> Nueva --> Memoria(Default) --> Disco Duro VDI (30.8Gb) #Guardo en sgoinfree
+3. Configuracion-->Red-->Adaptador puente 					Para conexiones posteriores del bonus
+										(En caso de que no vayasmos a hacer el bonus lo dejaremos tal y como está NAT)
+4. Configuración-->Pantalla-->VBoxVGA #Evita un bug al iniciar la máquina
+5. Seleccionamos la .iso como disco de arranque
 
 PARTE 2: INSTALACION DEBIAN Y PARTICIONES
 
