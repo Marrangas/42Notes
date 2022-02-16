@@ -7,12 +7,13 @@ Bonus: Configura una sistema funcional de worpress con las funcionalidades light
 - [Script](#scritp)
 - [Bonus](#bonus)
 - [Conceptos](#conceptos)
-- [Lista de comandos básicos](#lista-de-comandos-básicos)
+- [Lista de comandos útiles](#lista-de-comandos-útiles)
 
 # Instalación
 [Volver al índice](#born2beroot)
 
-## Parte 0: CREACIÓN DE UNA MAQUINA VIRTUAL
+## Parte 0: CREACIÓN DE UNA MAQUINA VIRTUAL
+```
 0.	Crear carpeta en sgoinfree/nuestrousuario
 1.	Descargar iso Debian de la página web propia (misma configuración de arquitectura que nuestro ordenador 64 bits en nuestro caso
 2.	Virtual Box --> Nueva --> Memoria(Default) --> Disco Duro VDI (30.8Gb) #Guardo en sgoinfree
@@ -20,15 +21,14 @@ Bonus: Configura una sistema funcional de worpress con las funcionalidades light
 										(En caso de que no vayasmos a hacer el bonus lo dejaremos tal y como está NAT)
 4. Configuración-->Pantalla-->VBoxVGA #Evita un bug al iniciar la máquina
 5. Seleccionamos la .iso como disco de arranque
-
+```
 PARTE 2: INSTALACION DEBIAN Y PARTICIONES
-
+```
 	- Install
 	- Idioma, localizacion, y idioma de teclado (locale configuration)
 	- Hostname: "login42", usuario: "login", y contraseña y contraseña del root
 	- Zona horaria
-	- Particiones: Manual
-		Elegimos el disco duro como lugar donde hacer las particiones, con el tamaño completo
+	- Particiones: Manual		Elegimos el disco duro como lugar donde hacer las particiones, con el tamaño completo
 		Particion primaria (physical):
 			Tamaño segun subject, y al principio del espacio disponible montandolo en /boot 
 				#Va a ser el sda1, la particion fisica donde vamos a instalar el arranque del sistema
@@ -47,22 +47,25 @@ PARTE 2: INSTALACION DEBIAN Y PARTICIONES
 					#Además, el swap usa tipo de archivos especial, swap area
 	- Seleccionamos el mirror desde donde descargara los paquetes el apt
 	- Deseleccionamos los paquetes extra ESPECIALMENTE LA INTERFAZ GRAFICA
-
+```
 ## Parte 1 LVM
+```
 1.	Comprobar, el procesador del ordnador, la arquitectura debe ser la misma para poder virtualizar correctamente el sistema que elijamos (Debian 64 en este caso)
 2.	Crear la crear la máquina virtual en Virtual box
 3.	Crear 1 partición para el /boot (arranque del sistema operativo)
 4.	El resto del espacio reservado, ccrearemos una partición selecciónando la opción de do not mount it
 5.	Creamos un grupo volumenes encriptados (LVM)
 6.	Añadimos las particiones, según el tamaño del subject (considerar que virtual box gestióna la reserva de memoria en 1024 Bits)
-
+```
 ##  Parte 2 LOGIN
+```
 8.	Usar password de encriptación
 9.	Login: Preferible root para el setup
 10.	lsblk									<- 	Comprobamos que las particiones son correctas
 11.	aa-status								<- 	Comprobamos el estado de AppArmor. Deberia estar instalada y funcional por defecto
-
+```
 ## Parte 3 SUDO
+```
 14.	apt install sudo						<- 	Debemos estar en root. Si no: "su -" --> "root password"
 15.	dpkg -l | grep sudo						<- 	Comprobamos que este instalado correctamente
 	systemctl status sudo
@@ -89,17 +92,18 @@ Configuración sudo:
 	Defaults secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
 
 18. sudo mkdir /var/log/sudo				<-	Creamos la carpeta y el archivo donde vamos a guardar los logs
-
+```
 ## Parte 3: INSTALAR UFW: Uncomplicated Firewall. Es un firewall facil de configurar. Monitoriza los puertos
-
+```
 19.	apt install ufw
 20.	ufw enable
 21. systemctl enable ufw					<-	Activamos que se lance el ufw en cada inicio
 22.	ufw status								<-	Muestra los puertos Activamos
 23.	ufw allow 4242 #Permite el puerto 4242, que segun el subject es el unico debido
 24.	ufw delete numeroderegla	#Elimina la regla numerada
-
+```
 ## Parte 4 INSTALAR SSH
+```
 con autenticación y encriptacion de datos
 
 	apt install openssh-server
@@ -107,13 +111,13 @@ con autenticación y encriptacion de datos
 	nano /etc/ssh/sshd_config 
 		Port 22 --> Port 4242 #Cambiamos el puerto por defecto que usa el SSH por el 4242
 		PermiteRootLogin prohibit-password --> PermitRootLogin no #Elimina la opcion de conectarse como root
-
+		
 Desde consola externa, comprobamos la conexión remota:
 	ssh user@serverIP -p 4242 #Conectamos con el usuario a la direccion ip y en el puerto 4242
 	(ifconfg -a para comprobar la direccion ip)
-
+```
 ## Parte 5: INSTALAR POLITICA DE CONTRASEÑAS
-
+```
 sudo nano /etc/login.defs		#Cambiamos aqui la politica básica de contraseñas.  
 		PASS_MAX_DAYS    99999 -> PASS_MAX_DAYS    30		#PASS_WARN_AGE ya esta por defecto en 7
  		PASS_MIN_DAYS    0     -> PASS_MIN_DAYS    2 
@@ -146,9 +150,9 @@ En los usuarios ya creados, estos cambios no son retroactivos:
 		groupdel nombregrupo #Elimina el grupo
 		gpasswd -a nombreusuario nombregrupo #Añade el usuario al grupo. -d lo elimina
 		gpasswd -d <username> <groupname> - removes user from group;
-
+```
 ## Parte 6: CONFIGURAR UNA TAREA CRONOMETRADA
-
+```
 Usaremos cron
 
 	- sudo crontab -u root -e #Configuraremos el cron del root
@@ -160,12 +164,12 @@ Usaremos cron
 | 		*/1 * * * * sleep 30s && /path/to/monitoring.sh
 
 sleep $(bc <<< $(who -b | cut -d ":" -f 2)%10*60)
-
+```
 # Script
 [Volver al índice](#born2beroot)
 
 https://github.com/caroldaniel/42sp-cursus-born2beroot/blob/master/script/monitoring.sh
-
+```
 #!/bin/bash
 archv=$(uname -vm) #Uname da informacion del sistema. -v version kernel y -m arquitectura
 CPU=$(grep "physical id" /proc/cpuinfo | uniq | wc -l) #Cuento el numero de physical id distintos que aparecen en la info
@@ -204,17 +208,13 @@ wall -n "Architecture: $archv			#Wall envia un mensaje por pantalla. -n elimina 
 #User Log: $nuser
 #Network: IPv4 $ip // MAC $mac
 #Sudo: $nsudcmd commands executed"
-
+```
 
 # Bonus
 [Volver al índice](#born2beroot)
 
-INSTALACION DE SERVICIOS BONUS
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-PARTE 1: WORDPRESS CON LIGHTTPD, MariaDB y PHP
-
+## PARTE 1: Wordpress con ligttpd, MariaDB y PHP
+```
 	- Lighttpd: Es un webserver sencillo y rapido. Lo vamos a usar como base para alojar el WORDPRESS.
 		sudo apt install lighttpd
 		sudo ufw allow 80 	#Utiliza el puerto 80 por defecto. Tambien vale "sudo ufw allow https"
@@ -277,11 +277,11 @@ PARTE 1: WORDPRESS CON LIGHTTPD, MariaDB y PHP
 	Ahora podemos conectarnos al servidor a traves del navegador utilizando nuestra ip.
 		http://10.11.200.231
 
-----------------------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------------------
+
+```
 
 PARTE 2: INSTALAR UN SERVICIO EXTRA A TU ELECCIÓN: FAIL2BAN
-
+```
 	- Fail2ban: Se trata de un servicio de protección extra. Entre otras cosas, permite bloquear las ips de aquellos 
 	usuarios que hayan intentado conectarse de forma fallida mediante ssh tras un numero determinado de intentos.
 		sudo apt install fail2ban
@@ -301,51 +301,48 @@ PARTE 2: INSTALAR UN SERVICIO EXTRA A TU ELECCIÓN: FAIL2BAN
 		fail2ban-client status				#Checkeo de los status y las ip baneadas
 		fail2ban-client status sshd
 		tail -f /var/log/fail2ban.log
-
-----------------------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------------------
-
+```
 
 # Conceptos
 [Volver al índice](#born2beroot)
 
 DEBIAN VS CENTOS
-
-	Debian es más sencillo de utilizar, fácilmente actualizable y con multitud de paquetes para personalizar
-	CentOS tiene mas soporte y un mercado más grande, porque una vez instalado es más fácil de usar, personalizar
-	las actualizaciones y las configuraciones son muy complejas, y los paquetes más limitados.
+Debian es más sencillo de utilizar, fácilmente actualizable y con multitud de paquetes para personalizar
+CentOS tiene mas soporte y un mercado más grande, porque una vez instalado es más fácil de usar, personalizar
+las actualizaciones y las configuraciones son muy complejas, y los paquetes más limitados.
 
 LOGICAL VOLUME MANAGER: LVM
 
-	Es un sistema de manejo de la memoria del disco duro usado en Linux. Los "volumen físico", es decir,
-	el hardware, se divide en particiones primarias y en particiones lógicas. Las particiones primarias 
-	son fijas, y es donde se almacena la parte de arranque del sistema operativo, mientras que
-	las particiones lógicas, los "volumenes lógicos", se pueden subdividir en distintas particiones que 
-	pueden formar parte de distintos volumenes físicos, y que pueden incluso ser realocados. Estan agrupados
-	en "grupos de volumenes", que es una colección con nombre de volumenes lógicos. Solo puede haber una
-	partición lógica por ordenador, y necesita de una pequeña partición física que hace las veces de puntero.
+Es un sistema de manejo de la memoria del disco duro usado en Linux. Los "volumen físico", es decir,
+el hardware, se divide en particiones primarias y en particiones lógicas. Las particiones primarias 
+son fijas, y es donde se almacena la parte de arranque del sistema operativo, mientras que
+las particiones lógicas, los "volumenes lógicos", se pueden subdividir en distintas particiones que 
+pueden formar parte de distintos volumenes físicos, y que pueden incluso ser realocados. Estan agrupados
+en "grupos de volumenes", que es una colección con nombre de volumenes lógicos. Solo puede haber una
+partición lógica por ordenador, y necesita de una pequeña partición física que hace las veces de puntero.
 
 GESTIÓN DE PAQUETES: APT-GET, APT Y APTITUDE
 
-	La herramienta base de gestión de paquetes de linux es el DPKG. Sin embargo, es una herramienta de
-	bajo nivel, y requiere de instalación de las dependencias de forma manual. Por ello, se utiliza,
-	originalmente apt-get, y más actualmente apt como herramienta de instalación de paquetes.
-	Por su parte, Aptitude es una aplicación alternativa a Apt con interfaz gráfica, que permite una
-	gestión más intuitiva de las configuraciones posibles en las instalaciones.
+La herramienta base de gestión de paquetes de linux es el DPKG. Sin embargo, es una herramienta de
+bajo nivel, y requiere de instalación de las dependencias de forma manual. Por ello, se utiliza,
+originalmente apt-get, y más actualmente apt como herramienta de instalación de paquetes.
+Por su parte, Aptitude es una aplicación alternativa a Apt con interfaz gráfica, que permite una
+gestión más intuitiva de las configuraciones posibles en las instalaciones.
 
 APPARMOR vs SELinux
 
-	AppArmor es el programa por defecto de Debian de control del MAC (Mandatory Acces Control), un protocolo 
-	de seguridad que evita que los programas puedan afectar a elementos que previamente no tenian derecho
-	de hacerlo, aislandolas unas de otras. SELinux en cambio es mucho más complejo, pero también permite
-	mayor control y opciones de configuración.
+AppArmor es el programa por defecto de Debian de control del MAC (Mandatory Acces Control), un protocolo 
+de seguridad que evita que los programas puedan afectar a elementos que previamente no tenian derecho
+de hacerlo, aislandolas unas de otras. SELinux en cambio es mucho más complejo, pero también permite
+mayor control y opciones de configuración.
 
 CAMBIO DE HOSTNAME
 
 
 COMANDOS ÚTILES
+```
 
-
+```
 
 
 ## Virtualización
@@ -376,7 +373,7 @@ Una máquina virtual es...
  Secure Socket Shell. Protocolo de red que permite un acceso seguro a un sistema,
 con autenticación y encriptacion de datos
 
-# Lista de ccomandos básico
+# Lista de comandos útiles
 [Volver al índice](#born2beroot)
 
 lsblk                                     1 <- Comprobar particines
