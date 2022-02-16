@@ -1,3 +1,11 @@
+# Born to be root
+índcice
+- (LVM setup)[#LVM setup]
+- Instalation
+- Scripting
+- Bonus
+- Concepts
+- List of important comands
 # 42Notes
 -Qué es el kernell
 -Arquitectura de computadores
