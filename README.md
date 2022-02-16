@@ -41,3 +41,11 @@ $ ufw status verbose                *    comprobar port status
  La misma mierda con el ssh que no me funciona nunca...
  /etc/ssh/sshd_config              *     Ruta Path de la configuraciónd e ssh
  
+ 
+ systemctl start mariadb (no mariíadb-server) no funciona....
+ 
+ 
+ puede que no lo tengo aquí
+ sudo vi /var/www/html/wp-config.php
+ 
+ 
