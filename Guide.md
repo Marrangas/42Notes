@@ -13,8 +13,7 @@ Index
 </br>
 # Instalation
 [Back to index](# Born2beRoot)
-</br>
-</br>
+
 # Scripting
 [Back to index](# Born2beRoot)
 </br>
