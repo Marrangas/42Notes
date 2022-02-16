@@ -1,6 +1,6 @@
 # Born2beRoot
 Index
-- [LVM setup](#LVM setup)
+- [LVM setup](#lvm-setup)
 - Instalation
 - Scripting
 - Bonus
@@ -8,22 +8,23 @@ Index
 - List of important comands
 </br>
 # LVM setup
-[Back to index](#Born2beRoot)
+</br>
+[Back to index](#born2beroot)
 </br>
 </br>
 # Instalation
-[Back to index](# Born2beRoot)
+[Back to index](#Born2beRoot)
 
 # Scripting
-[Back to index](# Born2beRoot)
+[Back to index](#Born2beRoot)
 </br>
 </br>
 # Bonus
-[Back to index](# Born2beRoot)
+[Back to index](#Born2beRoot)
 </br>
 </br>
 # Concepts
-[Back to index](# Born2beRoot)
+[Back to index](#Born2beRoot)
 </br>
 #List of important comands
 
