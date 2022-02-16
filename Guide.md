@@ -1,12 +1,28 @@
-# Born to be root
-índcice
+# Born2beRoot
+Index
 - (LVM setup)[#LVM setup]
 - Instalation
 - Scripting
 - Bonus
 - Concepts
 - List of important comands
-# 42Notes
+</br>
+#LVM setup
+(Back to index)[#Born2beRoot]</br>
+</br>
+#Instalation
+(Back to index)[#Born2beRoot]</br>
+</br>
+#Scripting
+(Back to index)[#Born2beRoot]</br>
+</br>
+#Bonus
+(Back to index)[#Born2beRoot]</br>
+</br>
+#Concepts
+(Back to index)[#Born2beRoot]</br>
+#List of important comands
+
 -Qué es el kernell
 -Arquitectura de computadores
 -Qué es Linux
