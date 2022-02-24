@@ -20,12 +20,13 @@
 ## Parte 0: CREACIÓN DE MAQUINA VIRTUAL
 ```
 0.  Crear carpeta en sgoinfree/nuestrousuario
-1.  Descargar iso Debian de la página web de Debian			 Comprobar, arquitectura del procesador del ordnador
-							 		debe ser la misma para poder virtualizar correctamente
-							 		Debian 64 en este caso (amd64)
-2.  Virtual Box --> Nueva	--> Memoria(Default) --> Disco Duro VDI	Tamaño indeterminado subject especifica simillar
-3.  Config		--> Red  	--> Adaptador puente	 	Para conexiones posteriores del bonus
-4.  Config		--> Pantalla--> VBoxVGA				Evita un bug al iniciar la máquina
+1.  Descargar iso Debian de la página web de Debian	Comprobar, arquitectura del procesador del ordnador
+							debe ser la misma para poder virtualizar correctamente
+							Debian 64 en este caso (amd64)
+2.  Virtual Box --> Nueva  --> Memoria(Default) --> Disco Duro VDI
+							Tamaño indeterminado subject especifica similar
+3.  Config	--> Red     --> Adaptador puente	Para conexiones posteriores del bonus
+4.  Config	--> Pantalla--> VBoxVGA			Evita un bug al iniciar la máquina
 5.  Seleccionamos la .iso como disco de arranque
 ```
 
@@ -35,11 +36,10 @@
 7.  Idioma, localizacion, y idioma de teclado (locale configuration)
 8.  Hostname: "login42", usuario: "login", y contraseña y contraseña del root
 9. Zona horaria
-10. Particiones: Manual 						Elegimos el disco duro par la partició con el tamaño completo
+10. Particiones: Manual 			Elegimos el disco duro par la partició con el tamaño completo
 
-	Particion primaria (physical)
-		al principio del espacio disponible
-		montandolo en /boot 					Será sda1, la partición donde dónde  el arranque del sistema
+	Particion primaria (physical)		al principio del espacio disponible
+		montandolo en /boot 		Será sda1, la partición donde dónde  el arranque del sistema
 	
 	Partición lógica (Logical Volume):
 		Seleciomamos el reto de la partición (volumen físico par encriptación)
@@ -61,16 +61,18 @@
 ```
 11.	Usar password de encriptación
 12.	Login: Preferible root para el setup
-13.	lsblk					<- 	Comprobamos que las particiones son correctas
-14.	aa-status				<- 	Comprobamos el estado de AppArmor. Deberia estar instalada y funcional por defecto
-15. aptitude install apparmor			<-  En caso de no estar instalado lo instalamos	
-16. systemctl enable apparmor			<- Configuramos para que funcione al inicio
+13.	lsblk				<- Comprobamos que las particiones son correctas
+14.	aa-status			<- Comprobamos el estado de AppArmor. 
+					   Deberia estar instalada y funcional por defecto
+15. aptitude install apparmor		<- En caso de no estar instalado lo instalamos	
+16. systemctl enable apparmor		<- Configuramos para que funcione al inicio
 ```
 
 ## Parte 3: INSTALACIÓN DE HERRAMIENTAS
 ```
-17. su - 					<-  Para instalar sudo debemos estar en root. Si no: "su -" --> "root password"
-18. apt-get update -y				<-  Actualizamos apt
+17. su - 				<-  Para instalar sudo debemos estar en root. 
+					    Si no: "su -" --> "root password"
+18. apt-get update -y			<-  Actualizamos apt
 19. apt-get upgrade -y
 20. apt-get install aptitude
 21. apt-get install git -y 		
@@ -80,15 +82,15 @@
 
 ## Parte 4: SUDO
 ```
-24.	apt install sudo			<-  Instalación de sudo
-25.	dpkg -l | grep sudo			<-  Comprobamos que este instalado correctamente
+24.	apt install sudo		<-  Instalación de sudo
+25.	dpkg -l | grep sudo		<-  Comprobamos que este instalado correctamente
 	systemctl status sudo
-26. adduser <usuario> sudo			<-  Añadimos el usuario al grupo sudo
-    gpasswd -a hcastanh sudo			<-  Opción (2) para añadir -a añadir -d borrar
-	usermod -aG sudo your_username		<-  Opción (3) debemos ser root
-27. getent group sudo				<-  Comprobacion usuario
-28.	sudo reboot				<-  Reiniciar sudo
-29.	sudo -v					<-  Comprobación sudopowers
+26. adduser <usuario> sudo		<-  Añadimos el usuario al grupo sudo
+    gpasswd -a hcastanh sudo		<-  Opción (2) para añadir -a añadir -d borrar
+	usermod -aG sudo your_username	<-  Opción (3) debemos ser root
+27. getent group sudo			<-  Comprobacion usuario
+28.	sudo reboot			<-  Reiniciar sudo
+29.	sudo -v				<-  Comprobación sudopowers
 
 	Configuración sudo: 
 		/etc/sudoers			a)  archivo de configuración inicial
@@ -301,10 +303,10 @@ wall -n "Architecture: $archv
 Es un webserver sencillo y rapido. Lo vamos a usar como base para alojar el WORDPRESS.
 ```
 sudo apt install lighttpd
-sudo ufw allow 80 				<- Utiliza el puerto 80 por defecto. Tambien vale "sudo ufw allow https"
-systemctl start lighttpd 			<- Inicializamos el programa
-systemctl enable lighttpd 			<- Hacemos que se inicialice siempre al bootear
-systemctl status lighttpd 			<- Check
+sudo ufw allow 80 			<- Utiliza el puerto 80 por defecto. Tambien vale "sudo ufw allow https"
+systemctl start lighttpd 		<- Inicializamos el programa
+systemctl enable lighttpd 		<- Hacemos que se inicialice siempre al bootear
+systemctl status lighttpd 		<- Check
 ```
 
 ## Parte 12: MARIADB
@@ -317,16 +319,16 @@ systemctl enable mariadb-server #Hacemos que se inicialice siempre al bootear
 systemctl status mariadb-server #Check
 
 sudo mysql_secure_installation #Configuramos la instalacion, eliminando ciertas opciones inseguras
-	Switch to unix_socket authentication [Y/n]: Y			#Permite conectar con el unix socket, que maneja
-									con seguridad las conexiones entre procesos.
+	Switch to unix_socket authentication [Y/n]: Y		#Permite conectar con el unix socket, que maneja
+								con seguridad las conexiones entre procesos.
 	Enter current password for root (enter for none): Enter
 	Set root password? [Y/n]: Y
 	New password: Password
 	Re-enter new password: Password
-	Remove anonymous users? [Y/n]: Y 				#Elimina el acceso de usuarios anonimos
-	Disallow root login remotely? [Y/n]: Y				
-	Remove test database and access to it? [Y/n]:  Y		#Elimina la base de datos de prueba
-	Reload privilege tables now? [Y/n]:  Y				#Guarda los datos
+	Remove anonymous users? [Y/n]: Y 			#Elimina el acceso de usuarios anonimos
+	Disallow root login remotely? [Y/n]: Y			
+	Remove test database and access to it? [Y/n]:  Y	#Elimina la base de datos de prueba
+	Reload privilege tables now? [Y/n]:  Y			#Guarda los datos
 
 systemctl restart mariadb	#Restart para aplicar cambios
 sudo mariadb 				#Entro en la consola del mariaDB para configurarlo
@@ -337,7 +339,7 @@ sudo mariadb 				#Entro en la consola del mariaDB para configurarlo
 								#tablas de la base de datos.
 	FLUSH PRIVILEGES; 	#Aplico los cambios
 	EXIT
-	sudo mariadb -u nombreusuario -p 	#Check para ver si esta bien creado
+	sudo mariadb -u nombreusuario -p 			#Check para ver si esta bien creado
 	SHOW DATABASES;		#Check	
 ```
 
@@ -351,7 +353,7 @@ sudo apt install wget
 sudo wget hhttp://wordpress.org/latest.tar.gz -P /var/www/html #Descargo la ultima version de Wordpress
 sudo tar -xzvf /var/www/html/latest.tar.gz 	#Extraigo el .tar, lo extraigo, copio el contenido en 
 sudo rm /var/www/html/latest.tar.gz		#/var/www/html y borro el tar y el original extraido
-sudo cp -r wordpress/* /var/www/html					*
+sudo cp -r wordpress/* /var/www/html		
 sudo rm -rf wordpress
 sudo cp /var/www/html/wp-config-sample.php /var/www/html/wp-config.php	#Uso la config de prueba
 sudo vi /var/www/html/wp-config.php		#Cambio la configuracion para linkearla con la database de MariaDB
@@ -374,22 +376,24 @@ usuarios que hayan intentado conectarse de forma fallida mediante ssh tras un nu
 ```
 sudo apt install fail2ban
 systemctl start fail2ban
-cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local		Creamos una version local de la configuracion
-						Línea 285	#Cambiamos la configuracion en JAILS, despues de mode=normal añadiendo:
-								Cambiamos tambien los puertos de dropbear y selinux-ssh a 4242, ya que es la 
-								que usa nuestro ssh
+cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local		
+		Creamos una version local de la configuracion
+Línea 285	#Cambiamos la configuracion en JAILS, despues de mode=normal añadiendo:
+		Cambiamos tambien los puertos de dropbear y selinux-ssh a 4242, ya que es la 
+		que usa nuestro ssh
+	
 	enabled = true
 	maxretry = 3
 	findtime = 10m
 	bantime = 10m
 	port = 4242
 
-		systemctl restart fail2ban
-		systemctl status fail2ban
+systemctl restart fail2ban
+systemctl status fail2ban
 
-		fail2ban-client status				status y las ip baneadas
-		fail2ban-client status sshd
-		tail -f /var/log/fail2ban.log
+fail2ban-client status				status y las ip baneadas
+fail2ban-client status sshd
+tail -f /var/log/fail2ban.log
 ```
 
 # Conceptos
@@ -511,8 +515,8 @@ shasum sgoinfree/students/<tu_usuario>/Born2beroot.vdi > correcion.txt
 ```
 
 
-REFERENCIAS:
-	https://github.com/Sefy-j/Born2beroot
-	https://github.com/caroldaniel/42sp-cursus-born2beroot
-	https://github.com/hanshazairi/42-born2beroot
-	https://www.youtube.com/watch?v=2w-2MX5QrQw (particiones para el Bonus)
+REFERENCIAS: <br/>
+	https://github.com/Sefy-j/Born2beroot <br/>
+	https://github.com/caroldaniel/42sp-cursus-born2beroot<br/>
+	https://github.com/hanshazairi/42-born2beroot<br/>
+	https://www.youtube.com/watch?v=2w-2MX5QrQw (particiones para el Bonus)<br/>
